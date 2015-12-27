@@ -1,10 +1,153 @@
-.hexviewerwindow { font-family: monospace; background-color: #F2F2F2;}
+@font-face {
+    font-family: SourceCodePro;
+    src: url(SourceCodePro-Light.ttf);
+}
+.hexviewerwindow { font-family: SourceCodePro; background-color: #F2F2F2;}
 div.hexviewerwindow { padding: 20px; }
-.hexviewerwindow_table { border-collapse:collapse; border: 5px solid grey; margin-left: 16px; caption-side:bottom; }
+div.hexviewerwindow:focus { outline: none;} 
+.hexviewerwindow_table { border-collapse:collapse; margin-left: 16px; caption-side:bottom; }
 .hexviewerwindow_offset {background: #A9D0F5; padding-right: 8px; }
-.hexviewerwindow_visual {background: #A9F5F2; padding-left: 8px; }
+.hexviewerwindow_visual {background: #A9F5F2; padding: 0 0px !important; }
+.hexviewerwindow_visual_start {background: #A9F5F2; padding-left: 8px !important; padding-right: 0px !important;}
+.hexviewerwindow_visual_end {background: #A9F5F2; padding-left: 0px !important; padding-right: 8px !important;}
 .hexviewerwindow_code {}
 .hexviewerwindow_code_hi {background: #F4FA58; }
 .hexviewerwindow_border_start {border-left: solid #E0E0E0 1px; }
 .hexviewerwindow_border_middle {border-bottom: solid #E0E0E0 1px; border-top: solid #E0E0E0 1px;}
 .hexviewerwindow_border_end {border-right: solid #E0E0E0 1px; border-top: solid #E0E0E0 1px; }
+.hexviewerwindow td {line-height: 21px; font-size: 14px; padding: 0 4;}
+.blinking-cursor {
+  color: #2E3D48;
+  -webkit-animation: 0.7s blink step-end infinite;
+  -moz-animation: 0.7s blink step-end infinite;
+  -ms-animation: 0.7s blink step-end infinite;
+  -o-animation: 0.7s blink step-end infinite;
+  animation: 0.7s blink step-end infinite;
+}
+.edit-blinking-cursor {
+  color: #2E3D48;
+  -webkit-animation: 0.7s blink-edit step-end infinite;
+  -moz-animation: 0.7s blink-edit step-end infinite;
+  -ms-animation: 0.7s blink-edit step-end infinite;
+  -o-animation: 0.7s blink-edit step-end infinite;
+  animation: 0.7s blink-edit step-end infinite;
+}
+.hexviewerwindow_cursor {
+    color: white;
+    background-color: #6b9aba;
+}
+
+.edit_cursor {
+    color: white;
+    background-color: #B8860B;
+}
+
+@keyframes "blink" {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #6b9aba;
+    color: white;
+  }
+}
+
+@-moz-keyframes blink {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #6b9aba;
+    color: white;
+  }
+}
+
+@-webkit-keyframes "blink" {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #6b9aba;
+    color: white;
+  }
+}
+
+@-ms-keyframes "blink" {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #6b9aba;
+    color: white;
+  }
+}
+
+@-o-keyframes "blink" {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #6b9aba;
+    color: white;
+  }
+}
+
+@keyframes "blink-edit" {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #B8860B;
+    color: white;
+  }
+}
+
+@-moz-keyframes blink-edit {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #B8860B;
+    color: white;
+  }
+}
+
+@-webkit-keyframes "blink-edit" {
+  from, to {
+    background-color: #0099ff;
+    color: black;
+  }
+  50% {
+    background-color: #B8860B;
+    color: white;
+  }
+}
+
+@-ms-keyframes "blink-edit" {
+  from, to {
+    background-color: #F2F2F2;
+    color: black;
+  }
+  50% {
+    background-color: #B8860B;
+    color: white;
+  }
+}
+
+@-o-keyframes "blink-edit" {
+  from, to {
+    background-color: #F2F2F2;
+    color: black;
+  }
+  50% {
+    background-color: #B8860B;
+    color: white;
+  }
+}
