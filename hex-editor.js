@@ -159,7 +159,7 @@ $(document).ready(function () {
                 return (row * 16) + col;
             } else if (!!that.currentVisualPrompt) {
                 row = $(that.currentVisualPrompt).closest("tr")[0].rowIndex;
-                col = $(that.currentVisualPrompt).index() - 17;
+                col = $(that.currentVisualPrompt).index() - 18;
                 return (row * 16) + col;
             } else {
                 return -1;
@@ -193,7 +193,7 @@ $(document).ready(function () {
             }
         };
 
-        this.type = function (keyCode) {
+        this.type = function (keyCode, shift, ctrl) {
             if (hexMode) {
                 if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 70)) {
                     if (!!this.currentPrompt && this.currentPrompt.text() !== null) {
@@ -209,9 +209,59 @@ $(document).ready(function () {
                 }
             } else {
                 if (!!this.currentVisualPrompt && this.currentVisualPrompt.text() !== null) {
-                    this.currentPrompt.text(UTIL.HEX.dec2_to_hex(keyCode));
-                    editor.update(currentIndex, this.currentPrompt.text());
-                    this.moveRight();
+                    if(!ctrl && keyCode !== 16 && keyCode !== 17 && keyCode !== 91 && keyCode !== 93) {
+                        if(shift) {
+                            if (keyCode === 48) {
+                                keyCode = 41;
+                            } else if (keyCode === 49) {
+                                keyCode = 33;
+                            } else if (keyCode === 50) {
+                                keyCode = 64;
+                            } else if (keyCode === 51) {
+                                keyCode = 35;
+                            } else if (keyCode === 52) {
+                                keyCode = 36;
+                            } else if (keyCode === 53) {
+                                keyCode = 37;
+                            } else if (keyCode === 54) {
+                                keyCode = 94;
+                            } else if (keyCode === 55) {
+                                keyCode = 38;
+                            } else if (keyCode === 56) {
+                                keyCode = 42;
+                            } else if (keyCode === 57) {
+                                keyCode = 40;
+                            } else if (keyCode === 39) {
+                                keyCode = 34;
+                            } else if (keyCode === 59) {
+                                keyCode = 58;
+                            } else if (keyCode === 44) {
+                                keyCode = 60;
+                            } else if (keyCode === 45) {
+                                keyCode = 95;
+                            } else if (keyCode === 46) {
+                                keyCode = 62;
+                            } else if (keyCode === 47) {
+                                keyCode = 63;
+                            } else if (keyCode === 61) {
+                                keyCode = 43;
+                            } else if (keyCode === 91) {
+                                keyCode = 123;
+                            } else if (keyCode === 93) {
+                                keyCode = 125;
+                            } else if (keyCode === 92) {
+                                keyCode = 124;
+                            } else if (keyCode === 96) {
+                                keyCode = 126;
+                            }
+                        } else if (keyCode >= 65 && keyCode <= 90) {
+                            keyCode = keyCode + 32;
+                        } 
+
+                        this.currentPrompt.text(UTIL.HEX.dec2_to_hex(keyCode));
+                        editor.update(currentIndex, this.currentPrompt.text());
+                        this.moveRight();
+                    }
                 }
             }
         };
@@ -367,7 +417,7 @@ $(document).ready(function () {
             } else if (e.keyCode === 40) {
                 that.prompt.moveDown();
             } else {
-                that.prompt.type(e.keyCode);
+                that.prompt.type(e.keyCode, e.shiftKey, e.ctrlKey);
             }
         });
         $(table).on('click', ".hexviewerwindow_code, .hexviewerwindow_visual", function () {
