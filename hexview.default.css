@@ -3,14 +3,20 @@
     src: url(SourceCodePro-Light.ttf);
 }
 .hexviewerwindow { font-family: SourceCodePro; background-color: #F2F2F2;}
+.hexviewerwindow th {line-height: 21px; font-size: 14px; padding: 0 4;}
 div.hexviewerwindow { padding: 20px; }
 div.hexviewerwindow:focus { outline: none;} 
 .hexviewerwindow_table { border-collapse:collapse; margin-left: 16px; caption-side:bottom; }
 .hexviewerwindow_offset {background: #A9D0F5; padding-right: 8px; }
+.hexviewerwindow_head_offset {padding-right: 8px;}
 .hexviewerwindow_visual {background: #A9F5F2; padding: 0 0px !important; }
 .hexviewerwindow_visual_start {background: #A9F5F2; padding-left: 8px !important; padding-right: 0px !important;}
 .hexviewerwindow_visual_end {background: #A9F5F2; padding-left: 0px !important; padding-right: 8px !important;}
+.hexviewerwindow_head_visual {padding: 0 0px !important; }
+.hexviewerwindow_head_visual_start {padding-left: 8px !important; padding-right: 0px !important;}
+.hexviewerwindow_head_visual_end {padding-left: 0px !important; padding-right: 8px !important;}
 .hexviewerwindow_code {}
+.hexviewerwindow_head_code {background: #A9D0F5;}
 .hexviewerwindow_code_hi {background: #F4FA58; }
 .hexviewerwindow_border_start {border-left: solid #E0E0E0 1px; }
 .hexviewerwindow_border_middle {border-bottom: solid #E0E0E0 1px; border-top: solid #E0E0E0 1px;}
