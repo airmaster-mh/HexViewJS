@@ -154,11 +154,11 @@ $(document).ready(function () {
         var getCurrentIndex = function () {
             var row, col;
             if (!!that.currentPrompt) {
-                row = $(that.currentPrompt).closest("tr")[0].rowIndex;
+                row = $(that.currentPrompt).closest("tr")[0].rowIndex - 1;
                 col = $(that.currentPrompt).index() - 1;
                 return (row * 16) + col;
             } else if (!!that.currentVisualPrompt) {
-                row = $(that.currentVisualPrompt).closest("tr")[0].rowIndex;
+                row = $(that.currentVisualPrompt).closest("tr")[0].rowIndex - 1;
                 col = $(that.currentVisualPrompt).index() - 18;
                 return (row * 16) + col;
             } else {
@@ -373,6 +373,22 @@ $(document).ready(function () {
                 that.prompt.type(e.keyCode);
             }
         });
+        table.keydown(function (e) {
+            if (e.keyCode === 8) {
+                that.prompt.typeBack();
+                e.preventDefault();
+            } else if (e.keyCode === 13) {
+                that.prompt.typeEnter();
+            } else if (e.keyCode === 37) {
+                that.prompt.moveLeft();
+            } else if (e.keyCode === 38) {
+                that.prompt.moveUp();
+            } else if (e.keyCode === 39) {
+                that.prompt.moveRight();
+            } else if (e.keyCode === 40) {
+                that.prompt.moveDown();
+            }
+        });
         $(table).on('click', ".hexviewerwindow_code, .hexviewerwindow_visual", function () {
             that.prompt.startBlink($(this));
         });
@@ -386,6 +402,20 @@ $(document).ready(function () {
                 that.prompt.paste(pasteText);
             }
         });
+
+        tr = $("<tr>").addClass("hexviewerwindow");
+        $(table).append($("<thead>").append(tr));
+        
+        tr.append($("<th>").addClass("hexviewerwindow_head_offset"));
+        for (byte_index = 0; byte_index < this.row_width; byte_index += 1) {
+            tr.append($("<th>").addClass("hexviewerwindow_head_code").text(UTIL.HEX.dec2_to_hex(byte_index)));
+        }
+        tr.append($("<th>").addClass("hexviewerwindow_head_visual_start"));
+        for (byte_index = 0; byte_index < this.row_width; byte_index += 1) {
+            tr.append($("<th>").addClass("hexviewerwindow_head_visual").text(" "));
+        }
+        tr.append($("<th>").addClass("hexviewerwindow_head_visual_end"));
+
 
         for (row_index = 0; row_index < this.bin_data.length; row_index += this.row_width) {
             tr = $("<tr>").addClass("hexviewerwindow");
