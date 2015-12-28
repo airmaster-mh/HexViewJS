@@ -37,9 +37,23 @@ $(document).ready(function () {
             }
             return str;
         };
+
+        var dec_to_hex = function (dec, len) {
+            if(len > 8) {
+                len = 8;
+            }
+            var str = "";
+            var i = Math.floor((len + 1) / 2) - 1;
+            while (i >= 0) {
+                str += dec2_to_hex((dec >> (i * 8)) & 255);
+                i = i - 1;
+            }
+            return str;
+        }
         obj.HEX = {
             dec2_to_hex: dec2_to_hex,
-            dec_to_hex8: dec_to_hex8
+            dec_to_hex8: dec_to_hex8,
+            dec_to_hex: dec_to_hex
         };
     }(UTIL));
 
@@ -323,23 +337,17 @@ $(document).ready(function () {
 
     var HexEditor = function (div, option) {
         this.div = div;
-        this.hide_0x = true;
         this.decimal_offset = false;
         this.row_width = 16;
         this.word_size = 1;
         this.bin_data = [];
+        this.offset_length = 8;
         if (!!option) {
-            if (UTIL.exitst(option.hide_0x)) {
-                this.hide_0x = option.hide_0x;
-            }
             if (UTIL.exitst(option.decimal_offset)) {
                 this.decimal_offset = option.decimal_offset;
             }
             if (UTIL.exitst(option.row_width)) {
                 this.row_width = option.row_width;
-            }
-            if (UTIL.exitst(option.word_size)) {
-                this.word_size = option.word_size;
             }
         }
         this.prompt = new Prompt(this);
@@ -421,8 +429,8 @@ $(document).ready(function () {
             tr = $("<tr>").addClass("hexviewerwindow");
             offset_td = $("<td>");
             offset_td.text(this.decimal_offset
-                ? ("00000000" + offset).slice(-8)
-                : "0x" + UTIL.HEX.dec_to_hex8(offset));
+                ? (Array(this.offset_length).join('0') + offset).slice(this.offset_length * -1)
+                : "0x" + UTIL.HEX.dec_to_hex(offset, this.offset_length));
             offset_td.addClass("hexviewerwindow_offset");
             tr.append(offset_td);
             for (word_index = 0; word_index < this.row_width && (word_index + row_index) < this.bin_data.length; word_index += this.word_size) {
@@ -438,11 +446,7 @@ $(document).ready(function () {
                         text_td.text(".");
                     }
                 }
-                if (!this.hide_0x) {
-                    td.text("0x" + word);
-                } else {
-                    td.text(word);
-                }
+                td.text(word);
                 if (word_index === 0) {
                     tr.append(td);
                     tr.append($("<td>").addClass("hexviewerwindow_visual_start"));
@@ -515,9 +519,47 @@ $(document).ready(function () {
         return UTIL.BASE64.encode(this.bin_data);
     };
 
+    HexEditor.prototype.hideOffset = function () {
+        $('.hexviewerwindow_head_offset').hide();
+        $('.hexviewerwindow_offset').hide();
+    };
+
+    HexEditor.prototype.showOffset = function () {
+        $('.hexviewerwindow_head_offset').show();
+        $('.hexviewerwindow_offset').showOffset();
+    };
+
+    HexEditor.prototype.hideVisual = function () {
+        $('.hexviewerwindow_head_visual').hide();
+        $('.hexviewerwindow_head_visual_start').hide();
+        $('.hexviewerwindow_head_visual_end').hide();
+        $('.hexviewerwindow_visual').hide();
+        $('.hexviewerwindow_visual_start').hide();
+        $('.hexviewerwindow_visual_end').hide();
+    };
+
+    HexEditor.prototype.showVisual = function () {
+        $('.hexviewerwindow_head_visual').show();
+        $('.hexviewerwindow_head_visual_start').show();
+        $('.hexviewerwindow_head_visual_end').show();
+        $('.hexviewerwindow_visual').show();
+        $('.hexviewerwindow_visual_start').show();
+        $('.hexviewerwindow_visual_end').show();
+    };
+
+    HexEditor.prototype.relocate = function (row_num) {
+        this.row_width = row_num;
+        this.render();
+    };
+
+    HexEditor.prototype.offsetResize = function (len) {
+        this.offset_length = len;
+        this.render();
+    }
+
     if (!window.MEditor) {
         window.HexEditor = HexEditor;
-    }
+    };
 
     // var viewer = new HexEditor($('.hexviewwindow'));
     // viewer.load("iVBORw0KGgoAAAANSUhEUgAAAnIAAAC6CAIAAAClaDcyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACiSSURBVHhe7Z1tq21XdcfvV2o0ofkiLVI1pugLv0QRo1Fb4lcoQWh8QoTgi1KoIggKoqilCYEiCNpUGhOvqWLOjeneZ547z7xzjof/");
