@@ -1,18 +1,31 @@
-@font-face {
-    font-family: SourceCodePro;
-    src: url(SourceCodePro-Light.ttf);
-}
-.hexviewerwindow { font-family: SourceCodePro; background-color: #F2F2F2;}
-.hexviewerwindow th {line-height: 21px; font-size: 14px; padding: 0 4;}
-div.hexviewerwindow { padding: 20px; }
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+.hexviewerwindow { font-family: 'Source Code Pro'; background-color: #F2F2F2;}
+.hexviewerwindow th {line-height: 21px; font-size: 14px; padding: 0 4px; font-weight: bold;}
+div.hexviewerwindow { padding: 0px; }
 div.hexviewerwindow:focus { outline: none;} 
-.hexviewerwindow_table { border-collapse:collapse; margin-left: 16px; caption-side:bottom; }
+.hexviewerwindow_table { border-collapse:collapse; caption-side:bottom; }
 .hexviewerwindow_offset {background: #A9D0F5; padding-right: 8px; }
 .hexviewerwindow_head_offset {padding-right: 8px;}
-.hexviewerwindow_visual {background: #A9F5F2; padding: 0 0px !important; }
+.hexviewerwindow_visual {background: #A9F5F2; padding: 0 0 !important; width: 9px; }
+.hexviewerwindow_visual_empty {background: #A9F5F2; padding: 0 0 !important; width: 9px; }
+.colspan2 {width: 18px;}
+.colspan3 {width: 27px;}
+.colspan4 {width: 36px;}
+.colspan5 {width: 45px;}
+.colspan6 {width: 54px;}
+.colspan7 {width: 63px;}
+.colspan8 {width: 72px;}
+.colspan9 {width: 81px;}
+.colspan10 {width: 90px;}
+.colspan11 {width: 99px;}
+.colspan12 {width: 108px;}
+.colspan13 {width: 117px;}
+.colspan14 {width: 126px;}
+.colspan15 {width: 135px;}
+.colspan16 {width: 144px;}
 .hexviewerwindow_visual_start {background: #A9F5F2; padding-left: 8px !important; padding-right: 0px !important;}
 .hexviewerwindow_visual_end {background: #A9F5F2; padding-left: 0px !important; padding-right: 8px !important;}
-.hexviewerwindow_head_visual {padding: 0 0px !important; }
+.hexviewerwindow_head_visual {padding: 0 0 !important; }
 .hexviewerwindow_head_visual_start {padding-left: 8px !important; padding-right: 0px !important;}
 .hexviewerwindow_head_visual_end {padding-left: 0px !important; padding-right: 8px !important;}
 .hexviewerwindow_code {}
@@ -21,7 +34,7 @@ div.hexviewerwindow:focus { outline: none;}
 .hexviewerwindow_border_start {border-left: solid #E0E0E0 1px; }
 .hexviewerwindow_border_middle {border-bottom: solid #E0E0E0 1px; border-top: solid #E0E0E0 1px;}
 .hexviewerwindow_border_end {border-right: solid #E0E0E0 1px; border-top: solid #E0E0E0 1px; }
-.hexviewerwindow td {line-height: 21px; font-size: 14px; padding: 0 4;}
+.hexviewerwindow td {line-height: 21px; font-size: 14px; padding: 0 4px;}
 .blinking-cursor {
   color: #2E3D48;
   -webkit-animation: 0.7s blink step-end infinite;

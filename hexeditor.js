@@ -6,8 +6,8 @@ $(document).ready(function () {
         remove_whitespace: function (str) {
             return str.replace(/\n/g, "").replace(/\t/g, "").replace(/\ /g, "").replace(/\r/g, "");
         },
-        exitst: function (obj) {
-            if (obj === "undefined" || obj === null) {
+        exist: function (obj) {
+            if (obj === undefined || obj === null) {
                 return false;
             } else {
                 return true;
@@ -173,7 +173,14 @@ $(document).ready(function () {
                 return (row * 16) + col;
             } else if (!!that.currentVisualPrompt) {
                 row = $(that.currentVisualPrompt).closest("tr")[0].rowIndex - 1;
-                col = $(that.currentVisualPrompt).index() - 18;
+                var index = $(that.currentVisualPrompt).index();
+                var row_width = $($(that.currentVisualPrompt).closest("tr")[0]).find(".hexviewerwindow_code").length;
+                if(row_width >= 15) {
+                	col = index - 18;
+                } else {
+                	col = index - row_width - 3; 
+                }
+                
                 return (row * 16) + col;
             } else {
                 return -1;
@@ -342,12 +349,16 @@ $(document).ready(function () {
         this.word_size = 1;
         this.bin_data = [];
         this.offset_length = 8;
+        this.read_only = false;
         if (!!option) {
-            if (UTIL.exitst(option.decimal_offset)) {
+            if (UTIL.exist(option.decimal_offset)) {
                 this.decimal_offset = option.decimal_offset;
             }
-            if (UTIL.exitst(option.row_width)) {
+            if (UTIL.exist(option.row_width)) {
                 this.row_width = option.row_width;
+            }
+            if (UTIL.exist(option.read_only)) {
+            	this.read_only = option.read_only;
             }
         }
         this.prompt = new Prompt(this);
@@ -362,54 +373,67 @@ $(document).ready(function () {
         table = $("<table>");
         table.addClass("hexviewerwindow_table");
         this.div.append(table);
+        this.eventHandler = {};
         table.attr("tabindex", "0");
-        table.keypress(function (e) {
-            if (e.keyCode === 8) {
-                that.prompt.typeBack();
-                e.preventDefault();
-            } else if (e.keyCode === 13) {
-                that.prompt.typeEnter();
-            } else if (e.keyCode === 37) {
-                that.prompt.moveLeft();
-            } else if (e.keyCode === 38) {
-                that.prompt.moveUp();
-            } else if (e.keyCode === 39) {
-                that.prompt.moveRight();
-            } else if (e.keyCode === 40) {
-                that.prompt.moveDown();
-            } else {
-                that.prompt.type(e.keyCode);
-            }
-        });
-        table.keydown(function (e) {
-            if (e.keyCode === 8) {
-                that.prompt.typeBack();
-                e.preventDefault();
-            } else if (e.keyCode === 13) {
-                that.prompt.typeEnter();
-            } else if (e.keyCode === 37) {
-                that.prompt.moveLeft();
-            } else if (e.keyCode === 38) {
-                that.prompt.moveUp();
-            } else if (e.keyCode === 39) {
-                that.prompt.moveRight();
-            } else if (e.keyCode === 40) {
-                that.prompt.moveDown();
-            }
-        });
-        $(table).on('click', ".hexviewerwindow_code, .hexviewerwindow_visual", function () {
-            that.prompt.startBlink($(this));
-        });
+        if (!this.read_only) {
+            table.keypress(function (e) {
+                if (e.keyCode === 8) {
+                    that.prompt.typeBack();
+                    e.preventDefault();
+                } else if (e.keyCode === 13) {
+                    that.prompt.typeEnter();
+                } else if (e.keyCode === 37) {
+                    that.prompt.moveLeft();
+                } else if (e.keyCode === 38) {
+                    that.prompt.moveUp();
+                } else if (e.keyCode === 39) {
+                    that.prompt.moveRight();
+                } else if (e.keyCode === 40) {
+                    that.prompt.moveDown();
+                } else {
+                    that.prompt.type(e.keyCode);
+                }
+            });
+            table.keydown(function (e) {
+                if (e.keyCode === 8) {
+                    that.prompt.typeBack();
+                    e.preventDefault();
+                } else if (e.keyCode === 13) {
+                    that.prompt.typeEnter();
+                    e.preventDefault();
+                } else if (e.keyCode === 37) {
+                    that.prompt.moveLeft();
+                    e.preventDefault();
+                } else if (e.keyCode === 38) {
+                    that.prompt.moveUp();
+                    e.preventDefault();
+                } else if (e.keyCode === 39) {
+                    that.prompt.moveRight();
+                    e.preventDefault();
+                } else if (e.keyCode === 40) {
+                    that.prompt.moveDown();
+                    e.preventDefault();
+                }
+            });
+            $(table).on('click', ".hexviewerwindow_code, .hexviewerwindow_visual", function () {
+                that.prompt.startBlink($(this));
+            });
 
-        $(table).on('paste', ".hexviewerwindow_code, .hexviewerwindow_visual", function (e) {
-            var pasteText = null;
-            try {
-                pasteText = e.originalEvent.clipboardData.getData('text');
-            } catch (err) {}
-            if (!!pasteText) {
-                that.prompt.paste(pasteText);
-            }
-        });
+            $(table).on('paste', ".hexviewerwindow_code, .hexviewerwindow_visual", function (e) {
+                var pasteText = null;
+                try {
+                    pasteText = e.originalEvent.clipboardData.getData('text');
+                } catch (err) {}
+                if (!!pasteText) {
+                    that.prompt.paste(pasteText);
+                }
+            });
+            
+            $(table).focusout(function() {
+            	that.prompt.stopBlink();
+            	that.fire("focusout");
+            });
+        }
 
         tr = $("<tr>").addClass("hexviewerwindow");
         $(table).append($("<thead>").append(tr));
@@ -457,12 +481,13 @@ $(document).ready(function () {
             }
             if (word_index < this.row_width) {
                 td = $("<td>");
-                text_td = $("<td>").addClass("hexviewerwindow_visual");
+                text_td = $("<td>").addClass("hexviewerwindow_visual_empty");
                 tr.find(".hexviewerwindow_code:last").after(td);
                 tr.find(".hexviewerwindow_visual:last").after(text_td);
                 if (this.row_width - word_index > 1) {
                     td.attr("colspan", Math.floor(this.row_width - word_index));
                     text_td.attr("colspan", Math.floor(this.row_width - word_index));
+                    text_td.addClass("colspan" + Math.floor(this.row_width - word_index));
                 }
             }
             tr.find(".hexviewerwindow_visual:last").after($("<td>").addClass("hexviewerwindow_visual_end"));
@@ -488,16 +513,17 @@ $(document).ready(function () {
     };
 
     HexEditor.prototype.resize = function (size) {
-        var i;
+        var i, dataLength = this.bin_data.length;
         if (!!this.bin_data) {
             if (this.bin_data.length > size) {
                 this.bin_data.length = size;
             } else {
-                for (i = 0; i < size - this.bin_data.length; i += 1) {
+                for (i = 0; i < size - dataLength; i += 1) {
                     this.bin_data.push(0);
                 }
             }
         } else {
+        	this.bin_data = [];
             for (i = 0; i < size; i += 1) {
                 this.bin_data.push(0);
             }
@@ -555,8 +581,44 @@ $(document).ready(function () {
     HexEditor.prototype.offsetResize = function (len) {
         this.offset_length = len;
         this.render();
-    }
+    };
+    
+    HexEditor.prototype.getSize = function () {
+    	return this.bin_data.length;
+    };
 
+    HexEditor.prototype.highlight = function (start, length, code_cls, visual_cls) {
+    	var index = 0;
+    	var codeArray;
+    	var visualArray;
+    	var code_color = code_cls;
+    	var visual_color = !!visual_cls ? visual_cls : code_color;
+    	
+    	if(!!this.div) {
+    		codeArray = this.div.find(".hexviewerwindow_code");
+    		visualArray = this.div.find(".hexviewerwindow_visual");
+        	while (index < length && start + index < codeArray.length) {
+        		$(codeArray[start + index]).addClass(code_color);
+        		$(visualArray[start + index]).addClass(visual_color);
+        		index += 1;
+        	}	
+    	}
+    };
+    
+    HexEditor.prototype.on = function (event, handler) {
+    	if (!!this.eventHandler[event]) {
+    		this.eventHandler[event].push(handler);
+    	} else {
+    		this.eventHandler[event] = [handler];
+    	}
+    };
+    
+    HexEditor.prototype.fire = function (event, obj) {
+    	$.each(this.eventHandler[event], function(index, value) {
+    		value(obj);
+    	});
+    };
+    
     if (!window.MEditor) {
         window.HexEditor = HexEditor;
     };

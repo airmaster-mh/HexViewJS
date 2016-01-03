@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>Myungho's Hex Editor</title>
+    <script src="https://code.jquery.com/jquery-1.11.3.js" type="text/javascript"></script>
+    <script src="hexeditor.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="hexeditor.default.css" />
+</head>
+<body>
+    <style>
+    </style>
+    <div class="hexeditorwindow"></div>
+    <script language="javascript">
+        $(document).ready(function() {
+            var hexeditor = new HexEditor($('.hexeditorwindow'));
+            hexeditor.load(100);
+        });
+    </script>
+</body>
+</html>

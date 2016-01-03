@@ -1,3 +1,23 @@
+HexEditorJS
+===========
+
+Overview
+--------
+
+HexEditorJS has default hex viewer feature that based on HexViewJS, as well as the hex editing feature. I was decided to add edit feature to HexEditorJS, because I couldn't find a library that has hex edit feature on google. But HexViewJS's structure does not appropriate to extend features and does not provide enough function for my requirement. So I decided to borrow only the basic concepts of HexViewJS and re-create it.
+
+Documentation
+-------------
+
+See the documentation.html included in the repository.
+
+Examples
+--------
+
+See the examples.html included in the repository.
+
+
+
 HexViewJS
 =========
 
@@ -15,3 +35,4 @@ Examples
 --------
 
 See the examples.html included in the repository or [here](http://s3.amazonaws.com/hexviewjs/examples.html).
+
